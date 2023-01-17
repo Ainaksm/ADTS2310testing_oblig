@@ -155,6 +155,7 @@ public class EnhetstestBankController {
         List<Transaksjon> resultat = bankController.hentBetalinger();
 
         //assert
+        assertEquals(betaling,resultat);
 
     }
 
