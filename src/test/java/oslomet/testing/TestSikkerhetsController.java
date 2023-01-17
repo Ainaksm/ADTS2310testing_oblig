@@ -10,14 +10,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.mock.web.MockHttpSession;
 import oslomet.testing.DAL.BankRepository;
-import oslomet.testing.Models.Konto;
-import oslomet.testing.Models.Kunde;
-import oslomet.testing.Models.Transaksjon;
 import oslomet.testing.Sikkerhet.Sikkerhet;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,6 +72,16 @@ public class TestSikkerhetsController {
     }
 
     @Test
+    public void validerPersonnummer() {
+
+    }
+
+    @Test
+    public void validerPassord() {
+        
+    }
+
+    @Test
     public void test_loggUt() {
         // arrange
         session.setAttribute("Innlogget", null);
@@ -86,6 +91,26 @@ public class TestSikkerhetsController {
 
         // assert
         //assertNull();
+    }
+
+    @Test
+    public void test_loggInnAdmin() {
+        // arrange
+        //when().thenReturn("Logget inn");
+
+        // act
+        //String resultat =
+
+        // assert
+    }
+
+    @Test
+    public void test_adminIkkeLoggetInn(){
+        // arrange
+
+        // act
+
+        // assert
     }
 
     @Test
