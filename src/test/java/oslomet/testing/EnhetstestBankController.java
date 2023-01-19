@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -34,6 +35,48 @@ public class EnhetstestBankController {
     @Mock
     // denne skal Mock'es
     private Sikkerhet sjekk;
+
+    @Test
+    public void hentTransaksjoner_loggetInn() {
+        // arrange
+        List<Transaksjon> enTransaksjon = new ArrayList<>();
+        Transaksjon transaksjon1 = new Transaksjon(1,"01010110523",
+                100,"09.01.23","slpeis","","12345678901");
+        Transaksjon transaksjon2 = new Transaksjon(2,"12345678901",
+                50,"22.01.23","gave","","01010110523");
+        enTransaksjon.add(transaksjon1);
+        enTransaksjon.add(transaksjon2);
+
+        List<Konto> konti = new ArrayList<>();
+        Konto konto1 = new Konto("105010123456", "01010110523",
+                720, "Lønnskonto", "NOK", enTransaksjon);
+        konti.add(konto1);
+
+        konto1.setTransaksjoner(enTransaksjon);
+
+        when(sjekk.loggetInn()).thenReturn("01010110523");
+        when(repository.hentTransaksjoner(anyString(), anyString(), anyString())).thenReturn(konto1);
+
+        // act
+        Konto resultat = bankController.hentTransaksjoner("","","");
+
+        // assert
+        assertEquals(konto1, resultat);
+    }
+
+    @Test
+    public void hentTransaksjoner_ikkeLoggetInn() {
+        // arrange
+        Konto konto1 = new Konto("105010123456", "01010110523",
+                720, "Lønnskonto", "NOK", null);
+        when(sjekk.loggetInn()).thenReturn(null);
+
+        // act
+        Konto resultat = bankController.hentTransaksjoner(null,null,null);
+
+        // assert
+        assertNull(resultat);
+    }
 
     @Test
     public void hentKundeInfo_loggetInn() {
@@ -137,6 +180,16 @@ public class EnhetstestBankController {
     }
 
     @Test
+    public void registrerBetaling_loggetInn() {
+
+    }
+
+    @Test
+    public void registrerBetaling_ikkeLoggetInn() {
+
+    }
+
+    @Test
     public void hentBetalinger_LoggetInn() {
         // arrange
         List<Transaksjon> betaling = new ArrayList<>();
@@ -166,6 +219,49 @@ public class EnhetstestBankController {
 
         // act
         List<Transaksjon> resultat = bankController.hentBetalinger();
+
+        // assert
+        assertNull(resultat);
+    }
+
+    @Test
+    public void utforBetaling_loggetInn() {
+
+    }
+
+    @Test
+    public void utforBetaling_ikkeLoggetInn() {
+
+    }
+
+    @Test
+    public void endre_loggetInn() {
+        // arrange
+        Kunde enKunde = new Kunde("01010110523",
+                "Lene", "Jensen", "Askerveien 22", "3270",
+                "Asker", "22224444", "HeiHei");
+
+        when(sjekk.loggetInn()).thenReturn("01010110523");
+        when(repository.endreKundeInfo(any(Kunde.class))).thenReturn("OK");
+
+        // act
+        String resultat = bankController.endre(enKunde);
+
+        // assert
+        assertEquals("OK", resultat);
+    }
+
+    @Test
+    public void endre_ikkeLoggetInn() {
+        // arrange
+        Kunde enKunde = new Kunde("01010110523",
+                "Lene", "Jensen", "Askerveien 22", "3270",
+                "Asker", "22224444", "HeiHei");
+
+        when(sjekk.loggetInn()).thenReturn(null);
+
+        // act
+        String resultat = bankController.endre(enKunde);
 
         // assert
         assertNull(resultat);
