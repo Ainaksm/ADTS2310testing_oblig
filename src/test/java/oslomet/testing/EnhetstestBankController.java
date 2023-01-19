@@ -39,36 +39,21 @@ public class EnhetstestBankController {
     @Test
     public void hentTransaksjoner_loggetInn() {
         // arrange
-        List<Transaksjon> enTransaksjon = new ArrayList<>();
-        Transaksjon transaksjon1 = new Transaksjon(1,"01010110523",
-                100,"09.01.23","slpeis","","12345678901");
-        Transaksjon transaksjon2 = new Transaksjon(2,"12345678901",
-                50,"22.01.23","gave","","01010110523");
-        enTransaksjon.add(transaksjon1);
-        enTransaksjon.add(transaksjon2);
-
-        List<Konto> konti = new ArrayList<>();
-        Konto konto1 = new Konto("105010123456", "01010110523",
-                720, "Lønnskonto", "NOK", enTransaksjon);
-        konti.add(konto1);
-
-        konto1.setTransaksjoner(enTransaksjon);
+        Konto enKonto = new Konto();
 
         when(sjekk.loggetInn()).thenReturn("01010110523");
-        when(repository.hentTransaksjoner(anyString(), anyString(), anyString())).thenReturn(konto1);
+        when(repository.hentTransaksjoner(anyString(), anyString(), anyString())).thenReturn(enKonto);
 
         // act
         Konto resultat = bankController.hentTransaksjoner("","","");
 
         // assert
-        assertEquals(konto1, resultat);
+        assertEquals(enKonto, resultat);
     }
 
     @Test
     public void hentTransaksjoner_ikkeLoggetInn() {
         // arrange
-        Konto konto1 = new Konto("105010123456", "01010110523",
-                720, "Lønnskonto", "NOK", null);
         when(sjekk.loggetInn()).thenReturn(null);
 
         // act
@@ -80,7 +65,6 @@ public class EnhetstestBankController {
 
     @Test
     public void hentKundeInfo_loggetInn() {
-
         // arrange
         Kunde enKunde = new Kunde("01010110523",
                 "Lene", "Jensen", "Askerveien 22", "3270",
@@ -99,7 +83,6 @@ public class EnhetstestBankController {
 
     @Test
     public void hentKundeInfo_IkkeloggetInn() {
-
         // arrange
         when(sjekk.loggetInn()).thenReturn(null);
 
@@ -135,7 +118,6 @@ public class EnhetstestBankController {
     @Test
     public void hentKonti_IkkeLoggetInn()  {
         // arrange
-
         when(sjekk.loggetInn()).thenReturn(null);
 
         // act
@@ -181,12 +163,33 @@ public class EnhetstestBankController {
 
     @Test
     public void registrerBetaling_loggetInn() {
+        // arrange
+        Transaksjon enTransaksjon = new Transaksjon(1,"01010110523",
+                100,"09.01.23","slpeis","","12345678901");
 
+        when(sjekk.loggetInn()).thenReturn("01010110523");
+        when(repository.registrerBetaling(enTransaksjon)).thenReturn("OK");
+
+        //act
+        String resultat = bankController.registrerBetaling(enTransaksjon);
+
+        // assert
+        assertEquals("OK", resultat);
     }
 
     @Test
     public void registrerBetaling_ikkeLoggetInn() {
+        // arrange
+        Transaksjon enTransaksjon = new Transaksjon(1,"01010110523",
+                100,"09.01.23","slpeis","","12345678901");
 
+        when(sjekk.loggetInn()).thenReturn(null);
+
+        // act
+        String resultat = bankController.registrerBetaling(enTransaksjon);
+
+        // assert
+        assertNull(resultat);
     }
 
     @Test
@@ -226,12 +229,36 @@ public class EnhetstestBankController {
 
     @Test
     public void utforBetaling_loggetInn() {
+        // arrange
+        List<Transaksjon> enBetaling = new ArrayList<>();
+        Transaksjon betaling1 = new Transaksjon(1,"01010110523",
+                100,"09.01.23","slpeis","","12345678901");
+        enBetaling.add(betaling1);
 
+        when(sjekk.loggetInn()).thenReturn("01010110523");
+        when(repository.utforBetaling(betaling1.getTxID())).thenReturn("OK");
+        when(repository.hentBetalinger(anyString())).thenReturn(enBetaling);
+
+        // act
+        List<Transaksjon> resultat = bankController.utforBetaling(betaling1.getTxID());
+
+        // assert
+        assertEquals(enBetaling, resultat);
     }
 
     @Test
     public void utforBetaling_ikkeLoggetInn() {
+        // arrange
+        Transaksjon betaling1 = new Transaksjon(1,"01010110523",
+                100,"09.01.23","slpeis","","12345678901");
 
+        when(sjekk.loggetInn()).thenReturn(null);
+
+        // act
+        List<Transaksjon> resultat = bankController.utforBetaling(betaling1.getTxID());
+
+        // assert
+        assertNull(resultat);
     }
 
     @Test
