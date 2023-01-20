@@ -15,8 +15,7 @@ import oslomet.testing.Sikkerhet.Sikkerhet;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -72,45 +71,53 @@ public class TestSikkerhetsController {
     }
 
     @Test
-    public void validerPersonnummer() {
+    public void test_sjekkLoggetInnFeil() {
+        // arrange
+        when(repository.sjekkLoggInn(anyString(),anyString())).thenReturn("Feil i personnummer eller passord");
 
-    }
+        // act
+        String resultat = sikkerhetsController.sjekkLoggInn("12345678901", "JaJaJa");
 
-    @Test
-    public void validerPassord() {
-        
+        // assert
+        assertEquals("Feil i personnummer eller passord", resultat);
+
     }
 
     @Test
     public void test_loggUt() {
         // arrange
-        session.setAttribute("Innlogget", null);
+        session.setAttribute("Innlogget", "09876543210");
 
         // act
-        //resultat = sikkerhetsController.loggUt();
+        sikkerhetsController.loggUt();
+        String resultat = (String) session.getAttribute("Innlogget");
 
         // assert
-        //assertNull();
+        assertNull(resultat);
     }
 
     @Test
     public void test_loggInnAdmin() {
         // arrange
-        //when().thenReturn("Logget inn");
+        session.setAttribute("Innlogget", "Admin");
 
         // act
-        //String resultat =
+        String resultat = sikkerhetsController.loggInnAdmin("Admin", "Admin");
 
         // assert
+        assertEquals("Logget inn", resultat);
     }
 
     @Test
     public void test_adminIkkeLoggetInn(){
         // arrange
+        session.setAttribute("Innlogget", null);
 
         // act
+        String resultat = sikkerhetsController.loggInnAdmin(anyString(),anyString());
 
         // assert
+        assertEquals("Ikke logget inn", resultat);
     }
 
     @Test
