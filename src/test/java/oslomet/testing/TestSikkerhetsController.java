@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 import org.springframework.mock.web.MockHttpSession;
@@ -37,24 +36,18 @@ public class TestSikkerhetsController {
 
     @Before
     public void initSession() {
-        Map<String, Object> attributes = new HashMap<String,Object>();
+        Map<String, Object> attributes = new HashMap<>();
 
-        doAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                String key = (String) invocation.getArguments()[0];
-                return attributes.get(key);
-            }
+        doAnswer((Answer<Object>) invocation -> {
+            String key = (String) invocation.getArguments()[0];
+            return attributes.get(key);
         }).when(session).getAttribute(anyString());
 
-        doAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                String key = (String) invocation.getArguments()[0];
-                Object value = invocation.getArguments()[1];
-                attributes.put(key, value);
-                return null;
-            }
+        doAnswer((Answer<Object>) invocation -> {
+            String key = (String) invocation.getArguments()[0];
+            Object value = invocation.getArguments()[1];
+            attributes.put(key, value);
+            return null;
         }).when(session).setAttribute(anyString(), any());
     }
 
@@ -80,6 +73,25 @@ public class TestSikkerhetsController {
 
         // assert
         assertEquals("Feil i personnummer eller passord", resultat);
+
+    }
+
+    @Test
+    public void test_feilPersonnummer() {
+        // act
+        String resultat = sikkerhetsController.sjekkLoggInn("1234567890", "JaJaJa");
+
+        // assert
+        assertEquals("Feil i personnummer", resultat);
+    }
+
+    @Test
+    public void test_feilPassord() {
+        // act
+        String resultat = sikkerhetsController.sjekkLoggInn("12345678901","Ja");
+
+        // assert
+        assertEquals("Feil i passord", resultat);
 
     }
 

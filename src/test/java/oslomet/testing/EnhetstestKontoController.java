@@ -101,5 +101,6 @@ public class EnhetstestKontoController {
     @Test
     public void endreKonto_loggetInn() {
         // arrange
+
     }
 }
