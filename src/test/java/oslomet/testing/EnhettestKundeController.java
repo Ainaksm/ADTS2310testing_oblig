@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import oslomet.testing.API.AdminKundeController;
 import oslomet.testing.DAL.AdminRepository;
-import oslomet.testing.Models.Konto;
 import oslomet.testing.Models.Kunde;
 import oslomet.testing.Sikkerhet.Sikkerhet;
 
@@ -130,6 +129,39 @@ public class EnhettestKundeController {
 
         // act
         String resultat = kundeController.endre(enKunde);
+
+        // assert
+        assertEquals("Ikke logget inn", resultat);
+    }
+
+    @Test
+    public void slett_loggetInn() {
+        // arrange
+        Kunde enKunde = new Kunde("09090098765",
+                "Geir", "Sol", "Spikkestadveien 22", "3430",
+                "Spikkestad", "66663333", "JaJaJa");
+
+        when(sjekk.loggetInn()).thenReturn(enKunde.getPersonnummer());
+        when(repository.slettKunde(enKunde.getPersonnummer())).thenReturn("Logget inn");
+
+        // act
+        String resultat = kundeController.slett(enKunde.getPersonnummer());
+
+        // assert
+        assertEquals("Logget inn", resultat);
+    }
+
+    @Test
+    public void slett_ikkeLoggetInn() {
+        // arrange
+        Kunde enKunde = new Kunde("09090098765",
+                "Geir", "Sol", "Spikkestadveien 22", "3430",
+                "Spikkestad", "66663333", "JaJaJa");
+
+        when(sjekk.loggetInn()).thenReturn(null);
+
+        // act
+        String resultat = kundeController.slett(enKunde.getPersonnummer());
 
         // assert
         assertEquals("Ikke logget inn", resultat);
