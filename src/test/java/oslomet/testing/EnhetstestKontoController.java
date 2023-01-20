@@ -40,9 +40,9 @@ public class EnhetstestKontoController {
     public void hentAlleKonti_LoggetInn() {
         // arrange
         List<Konto> konti = new ArrayList<>();
-        Konto konto1 = new Konto("105010123456", "01010110523",
+        Konto enKonto = new Konto("105010123456", "01010110523",
                 720, "Lønnskonto", "NOK", null);
-        konti.add(konto1);
+        konti.add(enKonto);
 
         when(sjekk.loggetInn()).thenReturn("105010123456");
         when(repository.hentAlleKonti()).thenReturn(konti);
@@ -70,10 +70,36 @@ public class EnhetstestKontoController {
     @Test
     public void registrerKonto_LoggetInn() {
         //arrange
+        Konto enKonto = new Konto("105010123456", "01010110523",
+                720, "Lønnskonto", "NOK", null);
+
+        when(sjekk.loggetInn()).thenReturn(enKonto.getPersonnummer());
+        when(repository.registrerKonto(any(Konto.class))).thenReturn("OK");
+
+        // act
+        String resultat = kontoController.registrerKonto(enKonto);
+
+        // assert
+        assertEquals("OK", resultat);
     }
 
     @Test
     public void registrerKonto_ikkeLoggetInn() {
+        // arrange
+        Konto enKonto = new Konto("105010123456", "01010110523",
+                720, "Lønnskonto", "NOK", null);
+
+        when(sjekk.loggetInn()).thenReturn(null);
+
+        // act
+        String resultat = kontoController.registrerKonto(enKonto);
+
+        // arange
+        assertEquals("Ikke innlogget", resultat);
+    }
+
+    @Test
+    public void endreKonto_loggetInn() {
         // arrange
     }
 }
