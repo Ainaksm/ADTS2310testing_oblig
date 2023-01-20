@@ -71,13 +71,13 @@ public class EnhetstestKontoController {
                 720, "Lønnskonto", "NOK", null);
 
         when(sjekk.loggetInn()).thenReturn(enKonto.getPersonnummer());
-        when(repository.registrerKonto(any(Konto.class))).thenReturn("OK");
+        when(repository.registrerKonto(any(Konto.class))).thenReturn("Logget inn");
 
         // act
         String resultat = kontoController.registrerKonto(enKonto);
 
         // assert
-        assertEquals("OK", resultat);
+        assertEquals("Logget inn", resultat);
     }
 
     @Test
@@ -102,13 +102,13 @@ public class EnhetstestKontoController {
                 720, "Lønnskonto", "NOK", null);
 
         when(sjekk.loggetInn()).thenReturn(enKonto.getPersonnummer());
-        when(repository.endreKonto(any(Konto.class))).thenReturn("OK");
+        when(repository.endreKonto(any(Konto.class))).thenReturn("Logget inn");
 
         // act
         String resultat = kontoController.endreKonto(enKonto);
 
         // asssert
-        assertEquals("OK", resultat);
+        assertEquals("Logget inn", resultat);
     }
 
     @Test
@@ -133,13 +133,13 @@ public class EnhetstestKontoController {
                 720, "Lønnskonto", "NOK", null);
 
         when(sjekk.loggetInn()).thenReturn(enKonto.getPersonnummer());
-        when(repository.slettKonto(enKonto.getKontonummer())).thenReturn("OK");
+        when(repository.slettKonto(enKonto.getKontonummer())).thenReturn("Logget inn");
 
         // act
         String resultat = kontoController.slettKonto(enKonto.getKontonummer());
 
         // assert
-        assertEquals("OK", resultat);
+        assertEquals("Logget inn", resultat);
     }
 
     @Test

@@ -168,13 +168,13 @@ public class EnhetstestBankController {
                 100,"09.01.23","slpeis","","12345678901");
 
         when(sjekk.loggetInn()).thenReturn("01010110523");
-        when(repository.registrerBetaling(enTransaksjon)).thenReturn("OK");
+        when(repository.registrerBetaling(enTransaksjon)).thenReturn("Logget inn");
 
         //act
         String resultat = bankController.registrerBetaling(enTransaksjon);
 
         // assert
-        assertEquals("OK", resultat);
+        assertEquals("Logget inn", resultat);
     }
 
     @Test
@@ -269,13 +269,13 @@ public class EnhetstestBankController {
                 "Asker", "22224444", "HeiHei");
 
         when(sjekk.loggetInn()).thenReturn("01010110523");
-        when(repository.endreKundeInfo(any(Kunde.class))).thenReturn("OK");
+        when(repository.endreKundeInfo(any(Kunde.class))).thenReturn("Logget inn");
 
         // act
         String resultat = bankController.endre(enKunde);
 
         // assert
-        assertEquals("OK", resultat);
+        assertEquals("Logget inn", resultat);
     }
 
     @Test

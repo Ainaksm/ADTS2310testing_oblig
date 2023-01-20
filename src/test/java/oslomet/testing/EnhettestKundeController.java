@@ -69,5 +69,36 @@ public class EnhettestKundeController {
         assertNull(resultat);
     }
 
+    @Test
+    public void lagreKunde_loggetInn() {
+        // arrange
+        Kunde enKunde = new Kunde("09090098765",
+                "Geir", "Sol", "Spikkestadveien 22", "3430",
+                "Spikkestad", "66663333", "JaJaJa");
 
+        when(sjekk.loggetInn()).thenReturn(enKunde.getPersonnummer());
+        when(repository.registrerKunde(any(Kunde.class))).thenReturn("Logget inn");
+
+        // act
+        String resultat = kundeController.lagreKunde(enKunde);
+
+        // assert
+        assertEquals("Logget inn", resultat);
+    }
+
+    @Test
+    public void lagreKunde_ikkeLoggetInn() {
+        // arrange
+        Kunde enKunde = new Kunde("09090098765",
+                "Geir", "Sol", "Spikkestadveien 22", "3430",
+                "Spikkestad", "66663333", "JaJaJa");
+
+        when(sjekk.loggetInn()).thenReturn(null);
+
+        // act
+        String resultat = kundeController.lagreKunde(enKunde);
+
+        // assert
+        assertEquals("Ikke logget inn", resultat);
+    }
 }
